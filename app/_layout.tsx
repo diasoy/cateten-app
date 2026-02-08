@@ -1,8 +1,5 @@
 import { queryClient } from "@/providers/query-provider";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { initializeDatabase } from "@/services/database";
 import {
   Manrope_400Regular,
   Manrope_500Medium,
@@ -10,8 +7,12 @@ import {
   Manrope_700Bold,
   useFonts,
 } from "@expo-google-fonts/manrope";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./global.css";
 
 void SplashScreen.preventAutoHideAsync();
@@ -23,6 +24,12 @@ export default function RootLayout() {
     Manrope_600SemiBold,
     Manrope_700Bold,
   });
+
+  useEffect(() => {
+    void initializeDatabase().catch((error) => {
+      console.error("Database init failed", error);
+    });
+  }, []);
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
@@ -61,6 +68,12 @@ export default function RootLayout() {
             name="index"
             options={{
               headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="history"
+            options={{
+              title: "Riwayat",
             }}
           />
         </Stack>
