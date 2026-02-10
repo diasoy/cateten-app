@@ -1,14 +1,13 @@
 import {
-  useDeleteTransaction,
-  useTransactionSummary,
-  useTransactionsWithCategory,
+    useTransactionSummary,
+    useTransactionsWithCategory,
 } from "@/hooks/use-transactions";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
 import { cssInterop } from "nativewind";
 import React from "react";
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 cssInterop(LinearGradient, { className: "style" });
@@ -69,9 +68,8 @@ const colorToAlpha = (hexColor?: string | null) => {
 const HomeScreen = () => {
   const router = useRouter();
   const { data: transactions = [] } = useTransactionsWithCategory({
-    limit: 8,
+    limit: 5,
   });
-  const deleteTransaction = useDeleteTransaction();
   const { data: summary } = useTransactionSummary();
   const netBalance = summary?.net ?? 0;
   const income = summary?.income ?? 0;
@@ -210,28 +208,6 @@ const HomeScreen = () => {
             const iconColor = item.categoryColor ?? "#94a3b8";
             const iconBg = colorToAlpha(item.categoryColor);
 
-            const handleDelete = () => {
-              Alert.alert(
-                "Hapus transaksi",
-                "Yakin ingin menghapus transaksi ini?",
-                [
-                  { text: "Batal", style: "cancel" },
-                  {
-                    text: "Hapus",
-                    style: "destructive",
-                    onPress: async () => {
-                      try {
-                        await deleteTransaction.mutateAsync(item.id);
-                      } catch (error) {
-                        console.error("Gagal menghapus transaksi", error);
-                        Alert.alert("Gagal", "Transaksi gagal dihapus.");
-                      }
-                    },
-                  },
-                ],
-              );
-            };
-
             return (
               <View
                 key={item.id}
@@ -284,12 +260,6 @@ const HomeScreen = () => {
                     {item.categoryName ?? "Tanpa kategori"}
                   </Text>
                 </View>
-                <Pressable
-                  onPress={handleDelete}
-                  className="mt-1 ml-5 h-6 w-6 items-center justify-center rounded-full bg-[#111827]"
-                >
-                  <Ionicons name="trash" size={24} color="#f87171" />
-                </Pressable>
               </View>
             );
           })}

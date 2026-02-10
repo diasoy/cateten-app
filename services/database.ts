@@ -78,7 +78,7 @@ async function seedDefaultCategories(database: SQLite.SQLiteDatabase) {
         ('cat-expense-1', 'Makan', 'expense', 'restaurant', '#DC2626'),
 				('cat-expense-2', 'Transport', 'expense', 'car', '#EA580C'),
         ('cat-expense-3', 'Belanja', 'expense', 'cart', '#7C3AED'),
-        ('cat-expense-4', 'Tagihan', 'expense', 'document-text', '#0F172A'),
+        ('cat-expense-4', 'Tagihan', 'expense', 'document-text', '#637193'),
 				('cat-expense-5', 'Kesehatan', 'expense', 'medkit', '#14B8A6'),
 				('cat-expense-6', 'Pendidikan', 'expense', 'school', '#6366F1'),
 				('cat-expense-7', 'Hiburan', 'expense', 'game-controller', '#F59E0B'),

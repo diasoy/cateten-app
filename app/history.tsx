@@ -1,10 +1,12 @@
 import { useCategories } from "@/hooks/use-categories";
-import { useTransactionsWithCategory } from "@/hooks/use-transactions";
+import {
+  useDeleteTransaction,
+  useTransactionsWithCategory,
+} from "@/hooks/use-transactions";
 import { TransactionType } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useMemo, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 
 const formatRupiah = (value: number) =>
   new Intl.NumberFormat("id-ID", {
@@ -40,6 +42,7 @@ const typeOptions: { id: "all" | TransactionType; label: string }[] = [
 const HistoryScreen = () => {
   const [typeFilter, setTypeFilter] = useState<"all" | TransactionType>("all");
   const [categoryFilter, setCategoryFilter] = useState<string | "all">("all");
+  const deleteTransaction = useDeleteTransaction();
   const { data: categories = [] } = useCategories(
     typeFilter === "all" ? undefined : typeFilter,
   );
@@ -56,164 +59,184 @@ const HistoryScreen = () => {
   const { data: transactions = [] } = useTransactionsWithCategory(filters);
 
   return (
-    <SafeAreaView
+    <ScrollView
       className="flex-1 bg-[#0b1220]"
-      edges={["top", "bottom", "left", "right"]}
+      showsVerticalScrollIndicator={false}
+      contentContainerClassName="px-5"
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerClassName="px-5"
-      >
-        <View className="mb-4 flex-row items-center rounded-full bg-[#0d162b] p-1">
-          {typeOptions.map((item) => (
-            <Pressable
-              key={item.id}
-              onPress={() => {
-                setTypeFilter(item.id);
-                setCategoryFilter("all");
-              }}
-              className={`flex-1 rounded-full px-3 py-2 ${
-                typeFilter === item.id ? "bg-[#1d4ed8]" : ""
-              }`}
-            >
-              <Text
-                className={`text-center text-[13px] ${
-                  typeFilter === item.id ? "text-white" : "text-[#7c8ba5]"
-                }`}
-                style={{ fontFamily: "Manrope_700Bold" }}
-              >
-                {item.label}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerClassName="gap-3"
-        >
+      <View className="my-4 flex-row items-center rounded-full bg-[#0d162b] p-1">
+        {typeOptions.map((item) => (
           <Pressable
-            onPress={() => setCategoryFilter("all")}
-            className={`flex-row items-center gap-2 rounded-full px-4 py-2 ${
-              categoryFilter === "all" ? "bg-[#1d4ed8]" : "bg-[#101b31]"
+            key={item.id}
+            onPress={() => {
+              setTypeFilter(item.id);
+              setCategoryFilter("all");
+            }}
+            className={`flex-1 rounded-full px-3 py-2 ${
+              typeFilter === item.id ? "bg-[#415487]" : ""
             }`}
           >
-            <Ionicons
-              name="grid"
-              size={16}
-              color={categoryFilter === "all" ? "#e8f0ff" : "#9fb4d6"}
-            />
             <Text
-              className={`text-[13px] ${
-                categoryFilter === "all" ? "text-white" : "text-[#9fb4d6]"
+              className={`text-center text-[13px] ${
+                typeFilter === item.id ? "text-white" : "text-[#7c8ba5]"
               }`}
               style={{ fontFamily: "Manrope_700Bold" }}
             >
-              Semua Kategori
+              {item.label}
             </Text>
           </Pressable>
-          {categories.map((item) => {
-            const active = categoryFilter === item.id;
-            return (
-              <Pressable
-                key={item.id}
-                onPress={() => setCategoryFilter(item.id)}
-                className={`flex-row items-center gap-2 rounded-full px-4 py-2 ${
-                  active ? "bg-[#1d4ed8]" : "bg-[#101b31]"
+        ))}
+      </View>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerClassName="gap-3"
+      >
+        <Pressable
+          onPress={() => setCategoryFilter("all")}
+          className={`flex-row items-center gap-2 rounded-full px-4 py-2 ${
+            categoryFilter === "all" ? "bg-[#1d4ed8]" : "bg-[#101b31]"
+          }`}
+        >
+          <Ionicons
+            name="grid"
+            size={16}
+            color={categoryFilter === "all" ? "#e8f0ff" : "#9fb4d6"}
+          />
+          <Text
+            className={`text-[13px] ${
+              categoryFilter === "all" ? "text-white" : "text-[#9fb4d6]"
+            }`}
+            style={{ fontFamily: "Manrope_700Bold" }}
+          >
+            Semua Kategori
+          </Text>
+        </Pressable>
+        {categories.map((item) => {
+          const active = categoryFilter === item.id;
+          return (
+            <Pressable
+              key={item.id}
+              onPress={() => setCategoryFilter(item.id)}
+              className={`flex-row items-center gap-2 rounded-full px-4 py-2 ${
+                active ? "bg-[#1d4ed8]" : "bg-[#101b31]"
+              }`}
+            >
+              <Ionicons
+                name={(item.icon ?? "pricetag") as any}
+                size={16}
+                color={active ? "#e8f0ff" : "#9fb4d6"}
+              />
+              <Text
+                className={`text-[13px] ${
+                  active ? "text-white" : "text-[#9fb4d6]"
                 }`}
+                style={{ fontFamily: "Manrope_700Bold" }}
               >
-                <Ionicons
-                  name={(item.icon ?? "pricetag") as any}
-                  size={16}
-                  color={active ? "#e8f0ff" : "#9fb4d6"}
-                />
+                {item.name}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+
+      <View className="my-6 flex-col gap-3 space-y-3">
+        {transactions.map((item) => {
+          const signedAmount =
+            item.type === "expense" ? -item.amount : item.amount;
+          const iconName =
+            item.categoryIcon ??
+            (item.type === "income" ? "arrow-down" : "arrow-up");
+          const iconColor = item.categoryColor ?? "#94a3b8";
+          const iconBg = colorToAlpha(item.categoryColor);
+
+          const handleDelete = () => {
+            Alert.alert(
+              "Hapus transaksi",
+              "Yakin ingin menghapus transaksi ini?",
+              [
+                { text: "Batal", style: "cancel" },
+                {
+                  text: "Hapus",
+                  style: "destructive",
+                  onPress: async () => {
+                    try {
+                      await deleteTransaction.mutateAsync(item.id);
+                    } catch (error) {
+                      console.error("Gagal menghapus transaksi", error);
+                      Alert.alert("Gagal", "Transaksi gagal dihapus.");
+                    }
+                  },
+                },
+              ],
+            );
+          };
+
+          return (
+            <View
+              key={item.id}
+              className="flex-row items-center rounded-[16px] border border-[#18243d] bg-[#0f192d] p-[14px]"
+            >
+              <View
+                className="mr-3 h-[38px] w-[38px] items-center justify-center rounded-[12px]"
+                style={{ backgroundColor: iconBg }}
+              >
+                <Ionicons name={iconName as any} size={18} color={iconColor} />
+              </View>
+              <View className="flex-1">
                 <Text
-                  className={`text-[13px] ${
-                    active ? "text-white" : "text-[#9fb4d6]"
+                  className="text-[15px] text-[#e7edff]"
+                  style={{ fontFamily: "Manrope_700Bold" }}
+                >
+                  {item.title}
+                </Text>
+                <Text
+                  className="mt-[2px] text-[12px] text-[#7f8dab]"
+                  style={{ fontFamily: "Manrope_500Medium" }}
+                >
+                  {formatDateTime(item.occurredAt)}
+                </Text>
+              </View>
+              <View className="items-end gap-1">
+                <Text
+                  className={`text-[15px] ${
+                    signedAmount < 0 ? "text-[#f87171]" : "text-[#34d399]"
                   }`}
                   style={{ fontFamily: "Manrope_700Bold" }}
                 >
-                  {item.name}
+                  {signedAmount < 0 ? "-" : "+"}
+                  {formatRupiah(signedAmount)}
                 </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-
-        <View className="my-6 flex-col gap-3 space-y-3">
-          {transactions.map((item) => {
-            const signedAmount =
-              item.type === "expense" ? -item.amount : item.amount;
-            const iconName =
-              item.categoryIcon ??
-              (item.type === "income" ? "arrow-down" : "arrow-up");
-            const iconColor = item.categoryColor ?? "#94a3b8";
-            const iconBg = colorToAlpha(item.categoryColor);
-
-            return (
-              <View
-                key={item.id}
-                className="flex-row items-center rounded-[16px] border border-[#18243d] bg-[#0f192d] p-[14px]"
-              >
-                <View
-                  className="mr-3 h-[38px] w-[38px] items-center justify-center rounded-[12px]"
-                  style={{ backgroundColor: iconBg }}
+                <Text
+                  className="text-[12px] text-[#7f8dab]"
+                  style={{ fontFamily: "Manrope_600SemiBold" }}
                 >
-                  <Ionicons
-                    name={iconName as any}
-                    size={18}
-                    color={iconColor}
-                  />
-                </View>
-                <View className="flex-1">
-                  <Text
-                    className="text-[15px] text-[#e7edff]"
-                    style={{ fontFamily: "Manrope_700Bold" }}
-                  >
-                    {item.title}
-                  </Text>
-                  <Text
-                    className="mt-[2px] text-[12px] text-[#7f8dab]"
-                    style={{ fontFamily: "Manrope_500Medium" }}
-                  >
-                    {formatDateTime(item.occurredAt)}
-                  </Text>
-                </View>
-                <View className="items-end gap-1">
-                  <Text
-                    className={`text-[15px] ${
-                      signedAmount < 0 ? "text-[#f87171]" : "text-[#34d399]"
-                    }`}
-                    style={{ fontFamily: "Manrope_700Bold" }}
-                  >
-                    {signedAmount < 0 ? "-" : "+"}
-                    {formatRupiah(signedAmount)}
-                  </Text>
-                  <Text
-                    className="text-[12px] text-[#7f8dab]"
-                    style={{ fontFamily: "Manrope_600SemiBold" }}
-                  >
-                    {item.categoryName ?? "Tanpa kategori"}
-                  </Text>
-                </View>
+                  {item.categoryName ?? "Tanpa kategori"}
+                </Text>
               </View>
-            );
-          })}
-
-          {transactions.length === 0 && (
-            <View className="rounded-[16px] border border-dashed border-[#1f2a44] px-4 py-3">
-              <Text
-                className="text-[12px] text-[#7c8ba5]"
-                style={{ fontFamily: "Manrope_600SemiBold" }}
+              <Pressable
+                onPress={handleDelete}
+                className="mt-1 ml-5 h-6 w-6 items-center justify-center rounded-full bg-[#111827]"
               >
-                Belum ada transaksi.
-              </Text>
+                <Ionicons name="trash" size={24} color="#f87171" />
+              </Pressable>
             </View>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          );
+        })}
+
+        {transactions.length === 0 && (
+          <View className="rounded-[16px] border border-dashed border-[#1f2a44] px-4 py-3">
+            <Text
+              className="text-[12px] text-[#7c8ba5]"
+              style={{ fontFamily: "Manrope_600SemiBold" }}
+            >
+              Belum ada transaksi.
+            </Text>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
