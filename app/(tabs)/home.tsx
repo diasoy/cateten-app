@@ -1,6 +1,6 @@
 import {
-    useTransactionSummary,
-    useTransactionsWithCategory,
+  useTransactionSummary,
+  useTransactionsWithCategory,
 } from "@/hooks/use-transactions";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,12 +11,6 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 cssInterop(LinearGradient, { className: "style" });
-
-const avatars = [
-  { id: "av-1", initials: "AR", color: "#fbbf24" },
-  { id: "av-2", initials: "JK", color: "#22c55e" },
-  { id: "av-3", initials: "LM", color: "#fb7185" },
-];
 
 const formatRupiah = (value: number) =>
   new Intl.NumberFormat("id-ID", {
@@ -76,10 +70,11 @@ const HomeScreen = () => {
   const expense = summary?.expense ?? 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-[#0b1220]" edges={["bottom", "top"]}>
+    <SafeAreaView className="flex-1 bg-[#0b1220]" edges={["top", "bottom"]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="px-5 pt-2 pb-8 space-y-4"
+        style={{ backgroundColor: "#0b1220" }}
       >
         <LinearGradient
           colors={["#4b7dff", "#2f64f2"]}

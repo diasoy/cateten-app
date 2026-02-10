@@ -43,10 +43,13 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="light" backgroundColor="#0f172a" translucent={false} />
+      <StatusBar style="light" backgroundColor="#0b1220" translucent={false} />
       <QueryClientProvider client={queryClient}>
         <Stack
           screenOptions={{
+            contentStyle: {
+              backgroundColor: "#0b1220",
+            },
             headerStyle: {
               backgroundColor: "#0f172a",
             },
@@ -74,6 +77,9 @@ export default function RootLayout() {
             name="history"
             options={{
               title: "Riwayat",
+              contentStyle: {
+                backgroundColor: "#0b1220",
+              },
             }}
           />
         </Stack>

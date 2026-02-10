@@ -1,20 +1,20 @@
 import {
-  useAddCategory,
-  useCategories,
-  useDeleteCategory,
+    useAddCategory,
+    useCategories,
+    useDeleteCategory,
 } from "@/hooks/use-categories";
 import { useAddTransaction } from "@/hooks/use-transactions";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
-  Alert,
-  Modal,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    Modal,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -196,10 +196,11 @@ const BudgetScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#070f1f]" edges={["bottom", "top"]}>
+    <SafeAreaView className="flex-1 bg-[#0b1220]" edges={["top", "bottom"]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-10"
+        style={{ backgroundColor: "#0b1220" }}
       >
         <View className="px-5 pt-3">
           <View className="mb-6 flex items-center justify-between">

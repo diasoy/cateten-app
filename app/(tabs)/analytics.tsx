@@ -201,10 +201,11 @@ const AnalyticsScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#070f1f]" edges={["bottom", "top"]}>
+    <SafeAreaView className="flex-1 bg-[#0b1220]" edges={["top", "bottom"]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-10"
+        style={{ backgroundColor: "#0b1220" }}
       >
         <View className="px-5 pt-3">
           <View className="mb-6 flex-row items-center justify-between">
