@@ -4,10 +4,7 @@ import { TransactionType } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useMemo, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import {
-    SafeAreaView,
-    useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const formatRupiah = (value: number) =>
   new Intl.NumberFormat("id-ID", {
@@ -41,7 +38,6 @@ const typeOptions: { id: "all" | TransactionType; label: string }[] = [
 ];
 
 const HistoryScreen = () => {
-  const insets = useSafeAreaInsets();
   const [typeFilter, setTypeFilter] = useState<"all" | TransactionType>("all");
   const [categoryFilter, setCategoryFilter] = useState<string | "all">("all");
   const { data: categories = [] } = useCategories(
@@ -60,17 +56,14 @@ const HistoryScreen = () => {
   const { data: transactions = [] } = useTransactionsWithCategory(filters);
 
   return (
-    <SafeAreaView className="flex-1 bg-[#0b1220]" edges={["left", "right"]}>
+    <SafeAreaView
+      className="flex-1 bg-[#0b1220]"
+      edges={["top", "bottom", "left", "right"]}
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="px-5"
-        contentContainerStyle={{
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-        }}
       >
-        <View className="mb-2" />
-
         <View className="mb-4 flex-row items-center rounded-full bg-[#0d162b] p-1">
           {typeOptions.map((item) => (
             <Pressable
@@ -148,7 +141,7 @@ const HistoryScreen = () => {
           })}
         </ScrollView>
 
-        <View className="mt-6 space-y-3">
+        <View className="my-6 flex-col gap-3 space-y-3">
           {transactions.map((item) => {
             const signedAmount =
               item.type === "expense" ? -item.amount : item.amount;

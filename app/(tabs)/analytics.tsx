@@ -413,8 +413,8 @@ const AnalyticsScreen = () => {
             })}
           </View>
 
-          <View className="mt-6 flex-row gap-3">
-            <View className="flex-1 rounded-[16px] border border-[#18243d] bg-[#0f192d] p-4">
+          <View className="mt-6 flex-col gap-3">
+            <View className="flex-row justify-between rounded-[16px] border border-[#18243d] bg-[#0f192d] p-4">
               <Text
                 className="text-[12px] text-[#9fb4d6]"
                 style={{ fontFamily: "Manrope_600SemiBold" }}
@@ -422,13 +422,13 @@ const AnalyticsScreen = () => {
                 Pemasukan
               </Text>
               <Text
-                className="mt-1 text-[18px] text-[#e7edff]"
+                className="mt-1 text-md text-green-400"
                 style={{ fontFamily: "Manrope_700Bold" }}
               >
                 {formatRupiah(totalIncome)}
               </Text>
             </View>
-            <View className="flex-1 rounded-[16px] border border-[#18243d] bg-[#0f192d] p-4">
+            <View className="flex-row justify-between rounded-[16px] border border-[#18243d] bg-[#0f192d] p-4">
               <Text
                 className="text-[12px] text-[#9fb4d6]"
                 style={{ fontFamily: "Manrope_600SemiBold" }}
@@ -436,13 +436,13 @@ const AnalyticsScreen = () => {
                 Pengeluaran
               </Text>
               <Text
-                className="mt-1 text-[18px] text-[#e7edff]"
+                className="mt-1 text-md text-red-400"
                 style={{ fontFamily: "Manrope_700Bold" }}
               >
                 {formatRupiah(totalSpent)}
               </Text>
             </View>
-            <View className="flex-1 rounded-[16px] border border-[#18243d] bg-[#0f192d] p-4">
+            <View className="flex-row justify-between rounded-[16px] border border-[#18243d] bg-[#0f192d] p-4">
               <Text
                 className="text-[12px] text-[#9fb4d6]"
                 style={{ fontFamily: "Manrope_600SemiBold" }}
@@ -450,7 +450,7 @@ const AnalyticsScreen = () => {
                 Saldo Bersih
               </Text>
               <Text
-                className="mt-1 text-[18px] text-[#e7edff]"
+                className="mt-1 text-md text-blue-400"
                 style={{ fontFamily: "Manrope_700Bold" }}
               >
                 {formatRupiah(netTotal)}
